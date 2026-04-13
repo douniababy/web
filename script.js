@@ -852,20 +852,21 @@ const searchSections = [
     {
         section: "Bones - Player (Head, Body, Limbs)",
         entries: {
-            "Head":                  "OLCJOGDHJJJ; // 0x44C",
-            "Root":                  "MPJBGDJJJMJ; // 0x3FC",
-            "Chest / Spine":         "HCLMADAFLPD; // 0x454",
-            "Hip / Pelvis":          "OLJBCONDGLO; // 0x450",
-            "Left Ankle":            "BMGCHFGEDDA; // 0x468",
-            "Right Ankle":           "AGHJLIMNPJA; // 0x46C",
-            "Left Toe / LeftFoot":   "0x470",
-            "Right Toe / RightFoot": "0x474",
-            "Left Shoulder":         "0x480",
-            "Right Shoulder":        "0x484",
-            "Right Hand":            "0x488",
-            "Left Hand":             "0x48C",
-            "Right Forearm / RightElbow": "0x42C",
-            "Left Forearm / LeftElbow":   "0x494"
+            "Head":                  "OLCJOGDHJJJ",
+            "Root":                  "MPJBGDJJJMJ",
+            "Chest / Spine":         "HCLMADAFLPD",
+            "Hip / Pelvis":          "OLJBCONDGLO",
+            "Left Ankle":            "BMGCHFGEDDA",
+            "Right Ankle":           "AGHJLIMNPJA",
+            "Left Toe":              "FDMBKCKMODA",
+            "Right Toe":             "CKABHDJDMAP",
+            "Left Shoulder":         "LIBEIIIAGIK",
+            "Right Shoulder":        "HDEPJIBNIIK",
+            "Right Hand":            "NJDDAPKPILB",
+            "Left Hand":             "JHIBMHEMJOL",
+            "Right Forearm":         "JBACCHNMGNJ",
+            "Left Forearm":          "FGECMMJKFNC",
+      
         }
     },
 
@@ -873,8 +874,8 @@ const searchSections = [
         section: "Match & Game Core",
         entries: {
             "CurrentMatch":          "m_Match",
-            "MatchStatus":           "0x8C",
-            "LocalPlayer":           "MOOHLKMMNMO; // 0x98",
+            "MatchStatus":           "LICPHHNNPPF ILGECLEFCCO",
+            "LocalPlayer":           "Player FJPEHEGICBO",
             "CurrentObserver":       "FNCMBMMKLLI BGGJJKKKFDC"
         }
     },
@@ -882,42 +883,42 @@ const searchSections = [
     {
         section: "Player Status & Info",
         entries: {
-            "Player_IsDead":         "FHMPKFMFEPM; // 0xD4",
-            "Player_Name":           "string OIAJCBLDHKP; // 0x2D4",
-            "AvatarManager":         "AvatarManager FOGJNGDMJKJ; // 0x4B4",
-            "FollowCamera":          "FollowCamera CHDOHNOEBML; // 0x444",
-            "XPose":                 "FBCAHNCLMDC ADFIDIPODGK; // 0x78",
-            "IsClientBot":           "IsClientBot; // 0x2DC"
+            "Player_IsDead":         "bool FHMPKFMFEPM",
+            "Player_Name":           "string OIAJCBLDHKP",
+            "AvatarManager":         "AvatarManager FOGJNGDMJKJ",
+            "FollowCamera":          "FollowCamera CHDOHNOEBML",
+            "XPose":                 "FBCAHNCLMDC ADFIDIPODGK",
+            "IsClientBot":           "public bool IsClientBot"
         }
     },
 
     {
         section: "Weapon & Combat",
         entries: {
-            "Weapon":                "GPBDEDFKJNA ActiveUISightingWeapon; // 0x3E8",
-            "Player_WeaponData":     "int KDKFDCPBIGE; // 0xA8",
+            "Weapon":                "GPBDEDFKJNA ActiveUISightingWeapon",
+            "Player_WeaponData":     "int KDKFDCPBIGE",
             "WeaponData":            "0x58",
-            "WeaponRecoil":          "float EFMCDHABKGP; // 0x214",
-            "sAim1":                 "<LPEIEILIKGC>k__BackingField; // 0x534",
-            "sAim2":                 "MADMMIICBNN GEGFCFDGGGP; // 0x930",
+            "WeaponRecoil":          "float EFMCDHABKGP",
+            "sAim1":                 "bool <LPEIEILIKGC>k__BackingField",
+            "sAim2":                 "MADMMIICBNN GEGFCFDGGGP",
             "sAim3":                 "Vector3 BOGOIAMJFDN; // 0x38",
             "sAim4":                 "Vector3 NHKKHPLFMNG; // 0x2C",
-            "HeadCollider":          "Collider HECFNHJKOMN; // 0x498",
-            "NoReload":              "ShootNoReload; // 0x99",
-            "IscombineWeapon":       "IEnumerator HJJLDBKKDDM; // 0xD0",
-            "CombineWeaponOnHand":   "HMNOKCEINKD AIOLLDLNKFG; // 0x58",
-            "WeaponOnHand":          "AAHMJHHPECM LFEPIIENLAF; // 0x54",
-            "UnkPlayerWeaponInfo":   "NPCNMJAGIKI COLEAPKGFLK; // 0x49C"
+            "HeadCollider":          "Collider HECFNHJKOMN",
+            "NoReload":              "ShootNoReload",
+            "IscombineWeapon":       "IEnumerator HJJLDBKKDDM",
+            "CombineWeaponOnHand":   "HMNOKCEINKD AIOLLDLNKFG",
+            "WeaponOnHand":          "AAHMJHHPECM LFEPIIENLAF",
+            "UnkPlayerWeaponInfo":   "NPCNMJAGIKI COLEAPKGFLK"
         }
     },
 
     {
         section: "Avatar & Visibility",
         entries: {
-            "Avatar":                "IUmaAvatar EEAGBKBMBLD; // 0x9C",
-            "AvtarData":             "public UMAData umaData; // 0x14",
-            "AvtarData_IsTeam":      "public bool isTeammate; // 0x51",
-            "Avatar_IsVisible":      "private BitArrayBoolean m_IsVisible; // 0x78"
+            "Avatar":                "IUmaAvatar EEAGBKBMBLD",
+            "AvtarData":             "public UMAData umaData",
+            "AvtarData_IsTeam":      "public bool isTeammate",
+            "Avatar_IsVisible":      "private BitArrayBoolean m_IsVisible"
         }
     },
 
@@ -955,19 +956,19 @@ const searchSections = [
     {
         section: "Player Data & Attributes",
         entries: {
-            "Player_Data":           "IPRIDataPool m_PRIDataPool; // 0x48",
-            "PlayerAttributes":      "PlayerAttributes JKPFFNEMJIF; // 0x4B0",
-            "Player_ShadowBase":     "PlayerNetwork.HHCBNAPCKHF m_ShadowState; // 0x1690",
-            "DictionaryEntities":    "Dictionary<uint, ReplicationEntity> m_ReplicationEntitis; // 0x68"
+            "Player_Data":           "IPRIDataPool m_PRIDataPool",
+            "PlayerAttributes":      "protected PlayerAttributes JKPFFNEMJIF",
+            "Player_ShadowBase":     "PlayerNetwork.HHCBNAPCKHF m_ShadowState",
+            "DictionaryEntities":    "Dictionary<uint, ReplicationEntity> m_ReplicationEntitis"
         }
     },
 
     {
         section: "ESP Features",
         entries: {
-            "Esp id":                "private ResourceID AFALJOPIIHO;",
-            "Esp level":             "public static readonly ResourceID BACKGROUND_CHAMPIONSHIP_TEAM_PROFILE;",
-            "IS_FIRING":             "private bool <LPEIEILIKGC>k__BackingField; // 0x534"
+            "Esp id":                "private ResourceID AFALJOPIIHO",
+            "Esp level":             "public static readonly ResourceID BACKGROUND_CHAMPIONSHIP_TEAM_PROFILE",
+            "IS_FIRING":             "private bool <LPEIEILIKGC>k__BackingField"
         }
     },
 
@@ -982,11 +983,11 @@ const searchSections = [
     {
         section: "TeleportMark Offsets",
         entries: {
-            "UIInGameScene":         "UIInGameScene KKDICEBFNAP; // 0x8",
-            "BigMapCtrl":            "m_BigMapCtrl; // 0x1F4",
-            "MapContentCtrl":        "m_MapContentCtrl; // 0x54",
-            "LocalMapMarkController": "m_LocalMapMarkController; // 0x90",
-            "MarkedPosition":        "Vector3 m_Position; // 0x58"
+            "UIInGameScene":         "UIInGameScene KKDICEBFNAP;",
+            "BigMapCtrl":            "m_BigMapCtrl;",
+            "MapContentCtrl":        "m_MapContentCtrl;",
+            "LocalMapMarkController": "m_LocalMapMarkController;",
+            "MarkedPosition":        "Vector3 m_Position;"
         }
     }
 ];
