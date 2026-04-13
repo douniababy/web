@@ -873,7 +873,7 @@ const searchSections = [
     {
         section: "Match & Game Core",
         entries: {
-            "CurrentMatch":          "m_Match",
+            "CurrentMatch":          "0x50",
             "MatchStatus":           "LICPHHNNPPF ILGECLEFCCO",
             "LocalPlayer":           "Player FJPEHEGICBO",
             "CurrentObserver":       "FNCMBMMKLLI BGGJJKKKFDC"
