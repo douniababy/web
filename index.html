@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEFIANE CHEATS - C++ Tools</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/MkPG8r4f/xd.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
+            color: #e2e8f0;
+            padding: 25px 15px;
+            overflow-x: hidden;
+        }
+
+        body.locked {
+            overflow: hidden;
+        }
+
+        body.locked > *:not(#passwordOverlay) {
+            display: none;
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+            margin: 20px 0 45px;
+            letter-spacing: 1.5px;
+            animation: neonGlow 3s infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 10px #3b82f6, 0 0 20px #00d4ff; }
+            to   { text-shadow: 0 0 20px #3b82f6, 0 0 35px #00d4ff; }
+        }
+
+        .converter-container {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 45px;
+            width: 100%;
+            max-width: 660px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.55);
+            transform: translateY(25px);
+            opacity: 0;
+            animation: fadeInUp 0.9s forwards;
+        }
+
+        .converter-container:hover {
+            transform: translateY(5px);
+            box-shadow: 0 18px 50px rgba(59, 130, 246, 0.22);
+        }
+
+        @keyframes fadeInUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .converter-container h1 {
+            font-size: 1.85rem;
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .converter-container h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 65px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            border-radius: 2px;
+        }
+
+        .dev-info, .dev-info1 {
+            font-size: 0.84rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 18px;
+            font-weight: 300;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 13px 16px;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 10px;
+            background: rgba(30, 41, 59, 0.65);
+            color: #f1f5f9;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 14px rgba(0, 212, 255, 0.3);
+        }
+
+        .input-group button {
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 18px rgba(59, 130, 246, 0.35);
+        }
+
+        .input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.45);
+        }
+
+        #dropArea, #fontDropArea, #csDropArea {
+            border: 2px dashed rgba(59, 130, 246, 0.45);
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            margin: 22px 0;
+            background: rgba(30, 41, 59, 0.4);
+            cursor: pointer;
+            transition: all 0.35s ease;
+        }
+
+        #dropArea:hover, #fontDropArea:hover, #csDropArea:hover,
+        #dropArea.dragover, #fontDropArea.dragover, #csDropArea.dragover {
+            border-color: #00d4ff;
+            background: rgba(59, 130, 246, 0.15);
+            transform: scale(1.015);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        .action-buttons button,
+        #convertImageButton,
+        #convertFontButton,
+        #extractOffsetsButton {
+            padding: 13px 30px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 5px 18px rgba(59, 130, 246, 0.35);
+        }
+
+        .action-buttons button:hover,
+        #convertImageButton:hover,
+        #convertFontButton:hover,
+        #extractOffsetsButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(96, 165, 250, 0.5);
+        }
+
+        .clear-button,
+        #clearAll,
+        #clearImageButton,
+        #clearFontButton,
+        #clearCsButton {
+            background: linear-gradient(135deg, #ef4444, #f87171) !important;
+            box-shadow: 0 5px 18px rgba(239, 68, 68, 0.35) !important;
+        }
+
+        .clear-button:hover {
+            background: linear-gradient(135deg, #dc2626, #f87171) !important;
+        }
+
+        .result-container,
+        #csResult {
+            max-height: 320px;
+            overflow-y: auto;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 22px 0 15px;
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        .result-actions,
+        #csActions {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .result-actions button,
+        #csActions button {
+            padding: 11px 24px;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+        }
+
+        /* ── Color Picker Section ── */
+
+        #colorPicker {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.28);
+            margin: 18px 0 25px;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 22px;
+        }
+
+        .preview-box {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background 0.4s ease;
+        }
+
+        #colorValues {
+            background: rgba(15, 23, 42, 0.75);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        #colorValues p {
+            margin: 11px 0;
+            font-size: 0.97rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        #colorValues strong {
+            color: #00d4ff;
+            min-width: 68px;
+        }
+
+        .color-preview {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 0 9px rgba(0,0,0,0.45);
+            flex-shrink: 0;
+        }
+
+        .copyButton {
+            background: rgba(59, 130, 246, 0.22);
+            border: none;
+            border-radius: 7px;
+            padding: 7px;
+            cursor: pointer;
+            min-width: 34px;
+        }
+
+        .copyButton:hover {
+            background: rgba(0, 212, 255, 0.35);
+        }
+
+        .copyButton img {
+            width: 17px;
+            height: 17px;
+            filter: invert(0.9);
+        }
+
+        /* ── Image Preview Fix ── */
+        .file-preview,
+        #imagePreview {
+            display: block;
+            max-width: 100%;
+            max-height: 280px;           /* حجم معقول - يمكنك تعديله إلى 220px أو 320px */
+            width: auto;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+            object-fit: contain;         /* يحافظ على النسبة بدون تمدد أو قطع */
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .file-preview {
+            display: none;
+        }
+
+        #imagePreview.visible {
+            display: block;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 9px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#3b82f6, #60a5fa);
+            border-radius: 9px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #00d4ff; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            h1 { font-size: 2.2rem; margin-bottom: 35px; }
+            .converter-container { padding: 22px 16px; }
+            .input-group { flex-direction: column; gap: 12px; }
+            .input-group input, .input-group button { width: 100%; }
+            .action-buttons { flex-direction: column; gap: 14px; }
+            .action-buttons button { width: 100%; padding: 14px; }
+            #imagePreview { max-height: 220px; }
+        }
+
+        /* ── Password Modal ── */
+        .password-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .password-overlay.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .password-modal {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+            animation: slideUp 0.6s ease;
+            text-align: center;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .password-modal h2 {
+            color: #00d4ff;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+        }
+
+        .password-modal p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .password-input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .password-input-group input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .password-input-group input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .password-input-group input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #00d4ff;
+        }
+
+        .password-submit {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .password-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.6);
+        }
+
+        .password-submit:active {
+            transform: translateY(0);
+        }
+
+        .password-error {
+            color: #ef4444;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .password-error.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .password-lock-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <div class="password-lock-icon">🔒</div>
+            <h2>SEFIANE CHEATS</h2>
+            <p>Enter password to access</p>
+            <div class="password-input-group">
+                <input type="password" id="passwordInput" placeholder="Enter password..." autocomplete="off">
+                <button class="toggle-password" id="togglePassword" title="Show/Hide password">👁️</button>
+            </div>
+            <button class="password-submit" id="passwordSubmit">Unlock</button>
+            <p class="password-error" id="passwordError">Incorrect password!</p>
+        </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <h1>SEFIANE CHEATS</h1>
+
+    <div class="converter-container" style="animation-delay: 0.1s">
+        <h1>Code Converter</h1>
+        <div class="input-group">
+            <input type="text" placeholder="Input" id="inputField">
+            <button id="inputIconButton1" title="Paste"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Paste" style="width:22px;height:22px;"></button>
+            <button id="inputIconButton2" title="Clear"><img src="https://cdn-icons-png.flaticon.com/512/660/660252.png" alt="Clear" style="width:22px;height:22px;"></button>
+        </div>
+        <div class="input-group">
+            <input type="text" placeholder="Output" id="outputField" readonly>
+            <button id="outputIconButton3" title="Copy"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy" style="width:22px;height:22px;"></button>
+            <button id="outputIconButton4" title="Clear"><img src="https://cdn-icons-png.flaticon.com/512/660/660252.png" alt="Clear" style="width:22px;height:22px;"></button>
+        </div>
+        <div class="action-buttons">
+            <button id="aobToByte">AOB → Byte</button>
+            <button id="byteToAob">Byte → AOB</button>
+            <button class="clear-button" id="clearAll">Clear All</button>
+        </div>
+        <div class="dev-info">Developed by SEFIANE</div>
+    </div>
+
+    <div class="converter-container" style="animation-delay: 0.2s">
+        <h1>Image Converter</h1>
+        <div class="dev-info1">Developed by SEFIANE</div>
+
+        <div id="dropArea">
+            <p>Drag & drop image here</p>
+            <p>or</p>
+            <button id="addImageButton">Upload Image</button>
+            <img id="imagePreview" class="file-preview" alt="Preview">
+            <div id="imageInfo" class="file-info"></div>
+        </div>
+
+        <div id="imageResult" class="result-container"></div>
+        <div id="imageActions" class="result-actions">
+            <button id="copyImageButton">Copy Bytes</button>
+            <button id="downloadImageButton">Download</button>
+        </div>
+
+        <button id="clearImageButton">Clear Image</button>
+        <button id="convertImageButton">Convert to C++</button>
+
+        <input type="file" id="imageInput" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="converter-container" style="animation-delay: 0.3s">
+        <h1>Font Converter</h1>
+        <div class="dev-info1">Developed by SEFIANE</div>
+
+        <div id="fontDropArea">
+            <p>Drag & drop font (TTF / OTF)</p>
+            <p>or</p>
+            <button id="addFontButton">Upload Font</button>
+            <div id="fontInfo" class="file-info"></div>
+        </div>
+
+        <div id="fontResult" class="result-container"></div>
+        <div id="fontActions" class="result-actions">
+            <button id="copyFontButton">Copy Bytes</button>
+            <button id="downloadFontButton">Download</button>
+        </div>
+
+        <button id="clearFontButton">Clear Font</button>
+        <button id="convertFontButton">Convert to C++</button>
+
+        <input type="file" id="fontInput" accept=".ttf,.otf" style="display:none;">
+    </div>
+
+    <div class="converter-container" style="animation-delay: 0.35s">
+        <h1>Dump FF Offset Extractor</h1>
+        <div class="dev-info1">Developed by SEFIANE</div>
+
+        <div id="csDropArea">
+            <p>Drag & drop .cs file</p>
+            <p>or</p>
+            <button id="addCsButton">Upload .cs</button>
+            <div id="csFileInfo"></div>
+        </div>
+
+        <div id="csStatus">No file loaded</div>
+
+        <button id="extractOffsetsButton">Extract Offsets</button>
+        <button id="clearCsButton">Clear File</button>
+
+        <div id="csResult" class="result-container"></div>
+        <div id="csActions" class="result-actions">
+            <button id="copyCsButton">Copy Offsets</button>
+            <button id="downloadCsButton">Download</button>
+        </div>
+
+        <input type="file" id="csInput" accept=".cs" style="display:none;">
+    </div>
+
+    <div class="converter-container" style="animation-delay: 0.4s">
+        <h1>Color Picker</h1>
+        <div class="dev-info">Developed by SEFIANE</div>
+
+        <input type="color" id="colorPicker" value="#00d4ff">
+
+        <div class="preview-container">
+            <div class="preview-box" id="colorPreviewBox">Preview</div>
+        </div>
+
+        <div id="colorValues">
+            <p><strong>HEX:</strong> <span id="hexValue">#00d4ff</span> <span class="color-preview" id="hexPreview"></span> <button class="copyButton" data-target="hexValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+            <p><strong>RGBA:</strong> <span id="rgbaValue">0, 212, 255, 1</span> <span class="color-preview" id="rgbaPreview"></span> <button class="copyButton" data-target="rgbaValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+            <p><strong>Float:</strong> <span id="rgbFloatValue">0.00, 0.83, 1.00</span> <button class="copyButton" data-target="rgbFloatValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+            <p><strong>CMYK:</strong> <span id="cmykValue">100%, 17%, 0%, 0%</span> <button class="copyButton" data-target="cmykValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+            <p><strong>HSV:</strong> <span id="hsvValue">195°, 100%, 100%</span> <button class="copyButton" data-target="hsvValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+            <p><strong>HSL:</strong> <span id="hslValue">195°, 100%, 50%</span> <button class="copyButton" data-target="hslValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- تغيير لون مربع المعاينة تلقائيًا -->
+    <script>
+        const colorPicker = document.getElementById('colorPicker');
+        const previewBox = document.getElementById('colorPreviewBox');
+
+        colorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            previewBox.style.backgroundColor = color;
+        });
+
+        previewBox.style.backgroundColor = colorPicker.value;
+    </script>
+</body>
+</html>
