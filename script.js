@@ -887,6 +887,7 @@ const searchSections = [
             "Player_Name":           "string OIAJCBLDHKP",
             "AvatarManager":         "AvatarManager FOGJNGDMJKJ",
             "FollowCamera":          "FollowCamera CHDOHNOEBML",
+            "AimRotation":           "Quaternion <KCFEHMAIINO>k__BackingField",
             "XPose":                 "FBCAHNCLMDC ADFIDIPODGK",
             "IsClientBot":           "public bool IsClientBot"
         }
