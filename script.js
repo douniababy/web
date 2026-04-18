@@ -988,7 +988,7 @@ const searchSections = [
             "BigMapCtrl":            "m_BigMapCtrl;",
             "MapContentCtrl":        "m_MapContentCtrl;",
             "LocalMapMarkController": "m_LocalMapMarkController;",
-            "MarkedPosition":        "Vector3 m_Position;"
+            "MarkedPosition":        "private Vector3 m_Position;"
         }
     }
 ];
@@ -1016,6 +1016,11 @@ function extractOffsets() {
         "Player_Data"
     ];
 
+    // قائمة العناصر التي تحتاج نتيجة ثالثة
+    const thirdMatchEntries = [
+        "MarkedPosition"
+    ];
+
     searchSections.forEach(section => {
         if (Object.keys(section.entries).length === 0) {
             result += "\n";
@@ -1032,8 +1037,26 @@ function extractOffsets() {
             const matchingLines = lines.filter(l => regex.test(l.trim()));
             
             if (matchingLines.length > 0) {
+                // إذا كان العنصر يحتاج نتيجة ثالثة
+                if (thirdMatchEntries.includes(name) && matchingLines.length > 2) {
+                    const thirdLine = matchingLines[2];
+                    let offset3 = "غير موجود";
+                    
+                    const commentMatch3 = thirdLine.match(/\/\/\s*(0x[0-9a-fA-F]+)/i);
+                    if (commentMatch3) {
+                        offset3 = commentMatch3[1];
+                    } else {
+                        const hexMatch3 = thirdLine.match(/0x[0-9a-fA-F]+/i);
+                        if (hexMatch3) {
+                            offset3 = hexMatch3[0];
+                        }
+                    }
+
+                    result += `uintptr_t ${name} = ${offset3};\n`;
+                    foundAny = true;
+                }
                 // إذا كان العنصر يحتاج نتيجة ثانية فقط
-                if (secondMatchEntries.includes(name) && matchingLines.length > 1) {
+                else if (secondMatchEntries.includes(name) && matchingLines.length > 1) {
                     const secondLine = matchingLines[1];
                     let offset2 = "غير موجود";
                     
@@ -1049,7 +1072,7 @@ function extractOffsets() {
 
                     result += `uintptr_t ${name} = ${offset2};\n`;
                     foundAny = true;
-                } else if (!secondMatchEntries.includes(name)) {
+                } else if (!secondMatchEntries.includes(name) && !thirdMatchEntries.includes(name)) {
                     // باقي العناصر تظهر النتيجة الأولى فقط
                     const firstLine = matchingLines[0];
                     let offset1 = "غير موجود";
@@ -1067,7 +1090,7 @@ function extractOffsets() {
                     result += `uintptr_t ${name} = ${offset1};\n`;
                     foundAny = true;
                 } else {
-                    // العناصر التي تحتاج نتيجة ثانية لكن لم توجد إلا نتيجة واحدة
+                    // العناصر التي تحتاج نتيجة (ثانية أو ثالثة) لكن لم توجد التطابقات الكافية
                     result += `uintptr_t ${name} = غير موجود;\n`;
                 }
             } else {
