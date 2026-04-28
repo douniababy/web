@@ -54,7 +54,7 @@
             errorMsg.classList.add('show');
             
             if (attempts >= MAX_ATTEMPTS) {
-                errorMsg.textContent = "Too many failed attempts! Redirecting...";
+                errorMsg.textContent = "Too many failed attempts! Redirecting to Instagram...";
                 setTimeout(() => {
                     window.location.href = REDIRECT_URL;
                 }, 2000);
@@ -727,108 +727,77 @@ document.querySelectorAll('.copyButton').forEach(button => {
     });
 });
 
-// Particles animation
+// Snow Particles Animation - ULTRA LIGHT
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = document.body.scrollHeight;
 
-const particleCount = 300;
-const drawCount = 60;
-const particles = [];
-const speedMultiplier = 3;
+const snowCount = 40; // ULTRA LIGHT - فقط 40 حبة
+const snowflakes = [];
 
-class Particle {
+class Snowflake {
     constructor() {
-        this.reset();
+        this.reset(true);
     }
 
-    reset() {
+    reset(initial = false) {
         this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.targetX = Math.random() * canvas.width;
-        this.targetY = canvas.height * 2;
-        this.speed = (Math.random() * 3 + 1) * speedMultiplier;
-        this.size = Math.random() * 6 + 2;
-        this.radius = Math.random() * 3;
-        this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+        this.y = initial ? Math.random() * canvas.height : -10;
+        this.size = Math.random() * 2 + 0.5; // 0.5-2.5px فقط
+        this.speed = Math.random() * 0.3 + 0.2; // بطيء جداً
+        this.wind = Math.random() * 0.15 - 0.075; // رياح خفيفة جداً
+        this.opacity = Math.random() * 0.25 + 0.1; // شفافية عالية
+        this.swing = Math.random() * Math.PI * 2;
+        this.swingSpeed = Math.random() * 0.005 + 0.002;
+        this.swingRadius = Math.random() * 0.2 + 0.1;
     }
 
     update() {
-        const deltaTime = 1 / 60;
-        this.x += (this.targetX - this.x) * deltaTime * (this.speed / 60);
-        this.y += (this.targetY - this.y) * deltaTime * (this.speed / 60);
-        this.rotation += this.rotationSpeed;
+        this.y += this.speed;
+        this.swing += this.swingSpeed;
+        this.x += this.wind + Math.sin(this.swing) * this.swingRadius;
 
-        if (this.y > canvas.height) {
+        if (this.y > canvas.height + 10 || this.x < -10 || this.x > canvas.width + 10) {
             this.reset();
-            this.y = -20;
         }
     }
 
     draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-
-        // Glow effect
-        for (let j = 0; j < 5; j++) {
-            const alpha = 0.1 - j * 0.02;
-            ctx.fillStyle = `rgba(187, 0, 255, ${alpha})`;
-            ctx.beginPath();
-            ctx.arc(0, 0, this.size + j * 2, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Main shape
-        ctx.fillStyle = "#bb00ff";
+        // بدون أي تأثيرات - رسم مباشر فقط
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.moveTo(this.size, 0);
-        for (let i = 1; i <= 5; i++) {
-            const angle = (i * 2 * Math.PI) / 5;
-            ctx.lineTo(this.size * 0.5 * Math.cos(angle), this.size * 0.5 * Math.sin(angle));
-        }
-        ctx.closePath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.restore();
     }
 }
 
-for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
+for (let i = 0; i < snowCount; i++) {
+    snowflakes.push(new Snowflake());
 }
 
-function animate() {
+function animateSnow() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update canvas size if window resized
     if (canvas.width !== window.innerWidth || canvas.height !== document.body.scrollHeight) {
         canvas.width = window.innerWidth;
         canvas.height = document.body.scrollHeight;
     }
 
-    // Draw particles
-    for (let i = 0; i < Math.min(drawCount, particles.length); i++) {
-        particles[i].update();
-        particles[i].draw();
-    }
+    snowflakes.forEach(flake => {
+        flake.update();
+        flake.draw();
+    });
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animateSnow);
 }
 
-animate();
+animateSnow();
 
-// Handle window resize
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = document.body.scrollHeight;
-});
-
-// Handle scroll
-window.addEventListener('scroll', () => {
-    // Particles will follow the scroll naturally because canvas is fixed
 });
 
 
@@ -1183,4 +1152,213 @@ extractOffsetsButton.addEventListener('click', extractOffsets);
 clearCsButton.addEventListener('click', clearCsFile);
 copyCsButton.addEventListener('click', copyCsResult);
 downloadCsButton.addEventListener('click', downloadCsResult);
+
+// ────────────────────────────────────────────────
+// AOB Cheat - Ultimate Edition
+// ────────────────────────────────────────────────
+
+// Populate amount select (2-20)
+const aobAmountSelect = document.getElementById('amountSelect');
+for (let i = 2; i <= 20; i++) {
+    let option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    if (i === 2) option.selected = true;
+    aobAmountSelect.appendChild(option);
+}
+
+let aobGeneratedData = [];
+
+function parseHexOffset(offsetStr) {
+    let clean = offsetStr.trim();
+    if (!clean.startsWith('0x')) clean = '0x' + clean;
+    return parseInt(clean, 16);
+}
+
+function formatHexOffset(value) {
+    if (value < 0x01) value = 0x01;
+    if (value > 0xFF) value = 0xFF;
+    return '0x' + value.toString(16).toUpperCase();
+}
+
+// Remove first hex value from AOB (for DECREASE)
+function removeFirstHex(aobArray) {
+    for (let i = 0; i < aobArray.length; i++) {
+        if (aobArray[i] !== '??' && aobArray[i] !== '?') {
+            aobArray.splice(i, 1);
+            break;
+        }
+    }
+    return aobArray;
+}
+
+// Add 00 at the beginning of AOB (for INCREASE)
+function addFirstHex(aobArray) {
+    aobArray.unshift('00');
+    return aobArray;
+}
+
+// Preserve last values (A5 43 or any last values stay same)
+function preserveLastValues(originalArray, newArray) {
+    if (originalArray.length >= 2 && newArray.length >= 2) {
+        newArray[newArray.length - 2] = originalArray[originalArray.length - 2];
+        newArray[newArray.length - 1] = originalArray[originalArray.length - 1];
+    }
+    return newArray;
+}
+
+function generateAOBVariants(originalAOB, headHex, chestHex, mode, amount) {
+    let variants = [];
+    let currentAOB = [...originalAOB];
+    let currentHead = headHex;
+    let currentChest = chestHex;
+
+    for (let step = 1; step <= amount; step++) {
+        if (mode === 'decrease') {
+            // DECREASE: Remove one hex from beginning
+            currentAOB = removeFirstHex([...currentAOB]);
+            currentHead = currentHead - 1;
+            currentChest = currentChest - 1;
+        } else {
+            // INCREASE: Add 00 at beginning
+            currentAOB = addFirstHex([...currentAOB]);
+            currentHead = currentHead + 1;
+            currentChest = currentChest + 1;
+        }
+
+        // Clamp offset values (0x01 to 0xFF)
+        if (currentHead < 0x01) currentHead = 0x01;
+        if (currentHead > 0xFF) currentHead = 0xFF;
+        if (currentChest < 0x01) currentChest = 0x01;
+        if (currentChest > 0xFF) currentChest = 0xFF;
+
+        // Preserve last values (A5 43)
+        currentAOB = preserveLastValues(originalAOB, currentAOB);
+
+        variants.push({
+            step: step,
+            aob: currentAOB.join(' '),
+            head: currentHead,
+            chest: currentChest
+        });
+    }
+    return variants;
+}
+
+async function simulateAOBProgress(variants, mode) {
+    const consoleDiv = document.getElementById('consoleLog');
+    const progressFill = document.getElementById('progressFill');
+    const percSpan = document.getElementById('percSpan');
+    const statusMsg = document.getElementById('statusMsg');
+
+    consoleDiv.innerHTML = '<div class="log-line">[SEFIANE] 🔄 Generating AOB variants (±1 shift)...</div>';
+    
+    for (let i = 0; i < variants.length; i++) {
+        let percent = ((i + 1) / variants.length) * 100;
+        progressFill.style.width = percent + '%';
+        percSpan.innerText = Math.floor(percent) + '%';
+        statusMsg.innerText = `⚡ Generating variant ${i+1}/${variants.length}`;
+        
+        consoleDiv.innerHTML += `<div class="log-line">[STEP ${i+1}] AOB = ${variants[i].aob.substring(0, 80)}...</div>`;
+        consoleDiv.innerHTML += `<div class="log-line">[STEP ${i+1}] HEAD = ${formatHexOffset(variants[i].head)} | CHEST = ${formatHexOffset(variants[i].chest)}</div>`;
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        
+        await new Promise(r => setTimeout(r, 150));
+    }
+    
+    progressFill.style.width = '100%';
+    percSpan.innerText = '100%';
+    statusMsg.innerText = '✅ Generation complete!';
+    consoleDiv.innerHTML += `<div class="log-line">🎉 SUCCESS: ${variants.length} variants generated</div>`;
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+}
+
+document.getElementById('processBtn').addEventListener('click', async () => {
+    let aobText = document.getElementById('aobInput').value.trim();
+    let headRaw = document.getElementById('headOffset').value.trim();
+    let chestRaw = document.getElementById('chestOffset').value.trim();
+    let mode = document.getElementById('operationMode').value;
+    let amount = parseInt(document.getElementById('amountSelect').value);
+
+    if (!aobText) {
+        alert("Please paste AOB code");
+        return;
+    }
+
+    let headVal = parseHexOffset(headRaw);
+    let chestVal = parseHexOffset(chestRaw);
+
+    if (isNaN(headVal) || headVal < 0x01 || headVal > 0xFF) {
+        alert("HEAD OFFSET must be between 0x01 and 0xFF");
+        return;
+    }
+    if (isNaN(chestVal) || chestVal < 0x01 || chestVal > 0xFF) {
+        alert("CHEST OFFSET must be between 0x01 and 0xFF");
+        return;
+    }
+    if (amount < 2 || amount > 20) {
+        alert("Amount must be between 2 and 20");
+        return;
+    }
+
+    let originalTokens = aobText.split(/\s+/);
+    
+    let variants = generateAOBVariants(originalTokens, headVal, chestVal, mode, amount);
+    
+    if (variants.length === 0) {
+        alert("No variants generated! Check your AOB format.");
+        return;
+    }
+
+    aobGeneratedData = { variants, mode, originalAOB: aobText, originalHead: headRaw, originalChest: chestRaw };
+    
+    await simulateAOBProgress(variants, mode);
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+    if (!aobGeneratedData.variants || aobGeneratedData.variants.length === 0) {
+        alert("No generated data! Please click GENERATE first.");
+        return;
+    }
+
+    let timestamp = new Date().toLocaleString();
+    let filename = `SEFIANE_CHEAT_CODES.txt`;
+    
+    let content = `=================================================
+⚡ SEFIANE CHEAT - ULTIMATE EDITION ⚡
+=================================================
+Original AOB: ${aobGeneratedData.originalAOB}
+Original HEAD: ${aobGeneratedData.originalHead}
+Original CHEST: ${aobGeneratedData.originalChest}
+Mode: ${aobGeneratedData.mode === 'decrease' ? 'DECREASE (-1)' : 'INCREASE (+1)'}
+Generated Variants: ${aobGeneratedData.variants.length}
+Timestamp: ${timestamp}
+=================================================\n\n`;
+
+    for (let i = 0; i < aobGeneratedData.variants.length; i++) {
+        let v = aobGeneratedData.variants[i];
+        content += `=================================================
+SEFIANE CHEAT - VARIANT ${i+1}
+=================================================
+AOB=${v.aob}
+HEAD_OFFSET=${formatHexOffset(v.head)}
+CHEST_OFFSET=${formatHexOffset(v.chest)}
+=================================================
+# Generated with advanced engine
+# Timestamp: ${timestamp}
+--------------------------------------------\n\n`;
+    }
+
+    const blob = new Blob([content], {type: 'text/plain'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    
+    const consoleDiv = document.getElementById('consoleLog');
+    consoleDiv.innerHTML += `<div class="log-line">📁 Downloaded: ${filename}</div>`;
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+});
+
 
